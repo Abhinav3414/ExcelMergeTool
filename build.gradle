@@ -11,8 +11,8 @@ repositories {
 
 sourceSets {
 	main {
-		java { srcDirs  'src' }   // no source dirs for the java compiler
-		groovy { srcDirs = ["src/main/java", "src/main/groovy"]}    // compile everything in src/ with groovy
+		java { srcDirs  'src' }
+		groovy { srcDirs = ["src/main/java", "src/main/groovy"]} // compile everything in src/ with groovy
 	}
 }
 
