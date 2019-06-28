@@ -29,17 +29,19 @@ File propsFile = new File('application.properties')
 props.load(propsFile.newDataInputStream())
 
 String filePath = props.getProperty('filePath')
+String inputFiles = props.getProperty('inputFiles')
+
+def inputFilesArr = inputFiles.split(',')
 
 /*Write a new random value and persist it to the file system:
-Integer rand = new Random().next(4)
-props.setProperty('porcupine', rand.toString())
-props.store(propsFile.newWriter(), null)
+ Integer rand = new Random().next(4)
+ props.setProperty('porcupine', rand.toString())
+ props.store(propsFile.newWriter(), null)
 
-Peek again:
-props.load(propsFile.newDataInputStream())
-println props.getProperty('porcupine')*/
+ props.load(propsFile.newDataInputStream())
+ println props.getProperty('porcupine')*/
 
-String inputFile = filePath + props.getProperty('inputFile')
+String inputFile = filePath + inputFilesArr[0]
 println "Input file is : " + inputFile
 
 def fillClass(int columnVal, def value, Data dataClass) {
