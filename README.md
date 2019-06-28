@@ -19,6 +19,9 @@ gradle cleanEclipseProject -> to remove the .project file <br />
 gradle cleanEclipseClasspath -> to empty the project's classpath <br />
 gradle eclipse -> to rebuild the Eclipse configuration <br />
 
+# If project is run via Jar and external property file :
+java -jar excelMergeTool-0.1.0.jar -Dspring.config.location=.\application.properties &
+
 # To run project : 
 
 git clone https://github.com/Abhinav3414/ExcelMergeTool.git

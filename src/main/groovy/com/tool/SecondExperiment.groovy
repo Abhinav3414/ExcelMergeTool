@@ -1,6 +1,5 @@
 package com.tool
 
-
 import org.apache.poi.openxml4j.opc.OPCPackage
 import org.apache.poi.ss.usermodel.Cell
 import org.apache.poi.ss.usermodel.CellStyle
@@ -16,10 +15,6 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook
 import groovy.transform.Sortable
 import groovy.transform.ToString
 
-String filePath = "C:/Users/abhinavg/Desktop/groovy/";
-String inputFile = filePath + "abc.xlsx"
-println "Input file is : " + inputFile
-
 @ToString(includeNames=true, includeFields=true, excludes='active')
 class Data {
 	String name
@@ -27,6 +22,25 @@ class Data {
 	Date logDate
 	def active
 }
+
+Properties props = new Properties()
+
+File propsFile = new File('application.properties')
+props.load(propsFile.newDataInputStream())
+
+String filePath = props.getProperty('filePath')
+
+/*Write a new random value and persist it to the file system:
+Integer rand = new Random().next(4)
+props.setProperty('porcupine', rand.toString())
+props.store(propsFile.newWriter(), null)
+
+Peek again:
+props.load(propsFile.newDataInputStream())
+println props.getProperty('porcupine')*/
+
+String inputFile = filePath + props.getProperty('inputFile')
+println "Input file is : " + inputFile
 
 def fillClass(int columnVal, def value, Data dataClass) {
 	switch (columnVal) {
@@ -87,8 +101,6 @@ def storeSheetDataInList(XSSFSheet sheet, LinkedList list) {
 	}
 }
 
-
-
 try {
 
 	OPCPackage pkg = OPCPackage.open(new File(inputFile));
@@ -113,7 +125,7 @@ list.sort{ x,y ->
 println "Sorted list is: "
 list.each { println it }
 
-OutputStream fileOut = new FileOutputStream(filePath + "workbook.xlsx")
+OutputStream fileOut = new FileOutputStream(filePath + props.getProperty('outputFileName'))
 Workbook outWb = new XSSFWorkbook();
 
 String safeName1 = WorkbookUtil.createSafeSheetName("DataSheet1")
