@@ -1,0 +1,74 @@
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'application'
+apply plugin: 'groovy'
+
+mainClassName = 'com.tool.SecondExperiment'
+
+repositories {
+	mavenCentral()
+}
+
+sourceSets {
+	main {
+		java { srcDirs  'src' }   // no source dirs for the java compiler
+		groovy { srcDirs = ["src/main/java", "src/main/groovy"]}    // compile everything in src/ with groovy
+	}
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+dependencies {
+	testCompile "junit:junit:4.12"
+
+	compile group: 'org.apache.poi', name: 'poi-ooxml', version: '3.9'
+	compile group: 'org.codehaus.groovy', name: 'groovy-all', version: '2.5.7'
+
+}
+
+// gradlew build
+jar {
+	baseName = 'excelMergeTool'
+	version =  '0.1.0'
+	// declare main class name in manifest file
+	manifest {
+		attributes "Main-Class": "$mainClassName"
+	}
+
+	// to make it fat jar, collect all compile dependencies and pack them
+	from {
+		configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+	}
+	{
+		exclude "META-INF/*.SF"
+		exclude "META-INF/*.DSA"
+		exclude "META-INF/*.RSA"
+	  }
+}
+
+task wrapper(type: Wrapper) {
+	gradleVersion = '2.10' //we want gradle 2.10 to run this project
+}
+
+// gradle -q fatJar
+/*
+task fatJar(type: Jar) {
+	classifier = 'fatjar'
+	manifest {
+		attributes "Main-Class": "$mainClassName"
+	}
+	from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+	with jar
+}
+
+*/
+
+// gradle build --refresh-dependencies
+// gradlew run
+// gradlew build
+
+//gradle cleanEclipse to clean the Eclipse configuration completely
+//gradle cleanEclipseProject to remove the .project file
+//gradle cleanEclipseClasspath to empty the project's classpath
+//gradle eclipse to rebuild the Eclipse configuration
